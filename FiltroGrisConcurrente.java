@@ -1,19 +1,17 @@
 
-
 import java.awt.image.BufferedImage;
 
-public class FiltroGris implements Runnable {
-
+public class FiltroGrisConcurrente implements Runnable{
     private final BufferedImage imagen;
     private final int inicioFila;
     private final int finFila;
-
-    public FiltroGris(BufferedImage imagen, int inicioFila, int finFila) {
+    
+    public FiltroGrisConcurrente(BufferedImage imagen, int inicioFila, int finFila) {
         this.imagen = imagen;
         this.inicioFila = inicioFila;
         this.finFila = finFila;
     }
-
+    
     @Override
     public void run() {
         for (int y = inicioFila; y < finFila; y++) {
@@ -35,5 +33,5 @@ public class FiltroGris implements Runnable {
             }
         }
     }
-
+    
 }

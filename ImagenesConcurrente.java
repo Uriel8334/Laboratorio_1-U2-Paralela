@@ -1,15 +1,18 @@
 
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
-public class Imagenes {
+/**
+ *
+ * @author andrespillajo
+ */
+public class ImagenesConcurrente {
 
     public static void main(String[] args) {
         try {
             // Cargar la imagen
-            File archivo = new File("imagenes\\24x24\\7 tendencias en el desarrollo de software.png");
+            File archivo = new File("imagen.png");
             BufferedImage imagen = ImageIO.read(archivo);
 
             int altura = imagen.getHeight();
@@ -23,15 +26,15 @@ public class Imagenes {
 
             int filasPorHilo = altura / numeroHilos;
             int finFila;
-
+            
             long inicio = System.nanoTime(); // Registrar tiempo inicial
-
+            
             for (int i = 0; i < numeroHilos; i++) {
                 int inicioFila = i * filasPorHilo;
-
-                if (i == numeroHilos - 1) {
+                
+                if(i == numeroHilos - 1){
                     finFila = altura;
-                } else {
+                }else{
                     finFila = inicioFila + filasPorHilo;
                 }
 
@@ -47,18 +50,14 @@ public class Imagenes {
             // Guardar la nueva imagen
             File archivoSalida = new File("imagen_gris_conc.png");
             ImageIO.write(imagen, "png", archivoSalida);
-
+            
             long fin = System.nanoTime(); // Registrar tiempo final
 
             System.out.println("Imagen procesada y guardada como 'imagen_gris_conc.png'");
             System.out.println("Tiempo de ejecución: " + (fin - inicio) / 1_000_000 + " ms");
-
-        } catch (java.io.IOException e) {
-            System.err.println("Error reading or writing image: " + e.getMessage());
-        } catch (InterruptedException e) {
-            // Restore interrupted status and report interruption
-            Thread.currentThread().interrupt();
-            System.err.println("Image processing was interrupted: " + e.getMessage());
+            
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
