@@ -1,9 +1,6 @@
-import java.awt.image.BufferedImage;
+
 import java.io.File;
-import javax.imageio.ImageIO;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
 
 public class ProcesarCarpeta {
 
@@ -45,48 +42,9 @@ public class ProcesarCarpeta {
 
         System.out.println("Procesando " + archivos.length + " imágenes con " + numeroHilos + " hilos...");
 
-        ExecutorService pool = Executors.newFixedThreadPool(numeroHilos);
-
-        long inicioTotal = System.nanoTime();
-
-        for (File archivo : archivos) {
-            pool.submit(() -> {
-                try {
-                    BufferedImage imagen = ImageIO.read(archivo);
-                    if (imagen == null) {
-                        System.err.println("No se pudo leer (no es imagen válida): " + archivo.getName());
-                        return;
-                    }
-
-                    // Usar FiltroGris para procesar la imagen completa (todas las filas)
-                    FiltroGris filtro = new FiltroGris(imagen, 0, imagen.getHeight());
-                    filtro.run(); // ejecutar en este hilo del pool
-
-                    File salida = new File(outDir, "gris_" + archivo.getName());
-                    ImageIO.write(imagen, "png", salida);
-
-                    System.out.println("Procesada: " + archivo.getName());
-                } catch (Exception e) {
-                    System.err.println("Error procesando " + archivo.getName() + ": " + e.getMessage());
-                }
-            });
-        }
-
-        pool.shutdown();
-        try {
-            // Esperar hasta 1 hora como máximo
-            if (!pool.awaitTermination(1, TimeUnit.HOURS)) {
-                System.err.println("Timeout esperando tareas. Terminando.");
-                pool.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            System.err.println("Procesamiento interrumpido.");
-            pool.shutdownNow();
-        }
-
-        long finTotal = System.nanoTime();
-        System.out.println("Todas las imágenes procesadas en " + ((finTotal - inicioTotal) / 1_000_000) + " ms");
-        System.out.println("Salida guardada en: " + outDir.getPath());
+        // ---> Punto de ejecución: aquí se inicia el procesamiento concurrente de imágenes.
+        // Llama a la clase `ImagenesConcurrentes` que crea y arranca los `Thread` (cada hilo
+        // procesa un rango de archivos), ejecuta el filtro y guarda las imágenes.
+        ImagenesConcurrentes.procesar(archivos, outDir, numeroHilos);
     }
 }
