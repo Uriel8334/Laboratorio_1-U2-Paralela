@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 public class ProcesarCarpeta {
 
     public static void main(String[] args) {
-        String carpeta = "imagenes\\24x24";
-        String carpetaSalida = carpeta + "\\salida";
+        String carpeta = "imagenes\\ImagenesParalela";
+        String carpetaSalida = carpeta + "\\salidaImagenes";
         int numeroHilos = 16;
 
         // Permitir pasar número de hilos como argumento opcional
