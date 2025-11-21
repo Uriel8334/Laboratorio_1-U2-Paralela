@@ -1,18 +1,19 @@
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.imageio.ImageIO;
 
 public class ImagenesConcurrentes {
+
     /**
      * Clase auxiliar que procesa un arreglo de archivos de imagen en paralelo.
      * Cada `Thread` recibe un rango de archivos a procesar.
      *
-     * Acciones de ejecución importantes dentro de este método:
-     * - Lectura de archivo de imagen: `ImageIO.read(archivo)`
-     * - Procesamiento (ejecución del filtro): `filtro.run()`
-     * - Escritura del archivo de salida: `ImageIO.write(...)`
-     * - Creación/arranque de hilos: `new Thread(...).start()`
-     * - Espera de finalización de hilos: `thread.join()`
+     * Acciones de ejecución importantes dentro de este método: - Lectura de
+     * archivo de imagen: `ImageIO.read(archivo)` - Procesamiento (ejecución del
+     * filtro): `filtro.run()` - Escritura del archivo de salida:
+     * `ImageIO.write(...)` - Creación/arranque de hilos: `new
+     * Thread(...).start()` - Espera de finalización de hilos: `thread.join()`
      */
     public static void procesar(File[] archivos, File outDir, int numeroHilos) {
         if (archivos == null || archivos.length == 0) {
@@ -25,9 +26,13 @@ public class ImagenesConcurrentes {
 
         long inicioTotal = System.nanoTime();
 
+        // Calcula cuántos archivos recibe cada hilo usando división entera:
+        // - archivosPorHilo = número mínimo de archivos por hilo (trunca hacia abajo).
+        // - resto = archivos que sobran porque la división no es exacta.
+        // La práctica común es repartir 1 archivo extra a los `resto` primeros hilos.
         int archivosPorHilo = archivos.length / hilosActivos;
         int resto = archivos.length % hilosActivos;
-
+        
         for (int i = 0; i < hilosActivos; i++) {
             final int inicioIdx = i * archivosPorHilo + Math.min(i, resto);
             final int finIdx = inicioIdx + archivosPorHilo + (i < resto ? 1 : 0);
