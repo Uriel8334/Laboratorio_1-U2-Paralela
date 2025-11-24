@@ -4,8 +4,8 @@ import java.io.File; // clase para representar archivos y directorios
 public class ProcesarCarpeta {
 
     public static void main(String[] args) {
-        String carpeta = "\\ImagenesParalela\\Imagenes8K"; // ruta de la carpeta que contiene imágenes
-        String carpetaSalida = carpeta + "\\salidaImagenes8k"; // ruta donde se guardarán las imágenes procesadas
+        String carpeta = "imagenes\\\\ImagenesParalela"; // ruta de la carpeta que contiene imágenes
+        String carpetaSalida = carpeta + "\\salidaImagenes"; // ruta donde se guardarán las imágenes procesadas
         int numeroHilos = 16; // número por defecto de hilos a usar
         // Permitir pasar número de hilos como argumento opcional
         if (args.length >= 1) { // si se recibió al menos un argumento
